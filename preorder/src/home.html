@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/drawer.css">
+    <script src="js/modal.js"></script>
+    <script src="js/table.js"></script>
+    <style>
+        .page-content {
+            width: calc(100% - 48px);
+            padding: 24px;
+        }
+        #noti,
+        a.mdl-navigation__link,
+        #orderlist tbody > tr, 
+        #packinglist tbody > tr, 
+        #readylist tbody > tr,
+        #paidlist tbody > tr {
+            cursor: pointer;
+        }
+        .right-btn {
+            position: absolute;
+            right: 24px;
+            padding-top: 60px;
+        }
+        .full-width {
+            width: 100%;
+        }
+        .status_row {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        #orderlist th {
+            background-color: #1e88e5;
+        }
+        #orderlist tbody > tr:nth-child(even){
+            background-color: #e1f5fe;
+        }
+        #orderlist tbody > tr:hover {
+            background-color: #84ffff;
+        }
+        #packinglist th {
+            background-color: #43a047;
+        }
+        #packinglist tbody > tr:nth-child(even){
+            background-color: #dcedc8;
+        }
+        #packinglist tbody > tr:hover {
+            background-color: #ccff90;
+        }
+        #readylist th {
+            background-color: #d81b60;
+        }
+        #readylist tbody > tr:nth-child(even){
+            background-color: #f8bbd0;
+        }
+        #readylist tbody > tr:hover {
+            background-color: #ff80ab;
+        }
+        #paidlist th {
+            background-color: #546e7a;
+        }
+        #paidlist tbody > tr:nth-child(even){
+            background-color: #eceff1;
+        }
+        #paidlist tbody > tr:hover {
+            background-color: #b0bec5;
+        }
+        #orderlist.mdl-data-table th, 
+        #packinglist.mdl-data-table th, 
+        #readylist.mdl-data-table th,
+        #paidlist.mdl-data-table th {
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="fullbody">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">P-Mart Horizont</span>
+                <div class="mdl-layout-spacer"></div>
+                <nav class="mdl-navigation">
+                    <span class="material-icons mdl-badge mdl-badge--overlap" data-badge="2" id="noti">notifications</span>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="noti">
+                        <li class="mdl-menu__item">Some Action</li>
+                        <li class="mdl-menu__item">Another Action</li>
+                        <li class="divider"></li>
+                        <li class="mdl-menu__item"><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">delete_sweep</span>ล้างทั้งหมด</li>
+                    </ul>
+                    <a class="mdl-navigation__link" onclick="logout()">ออกจากระบบ</a>
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <div class="user-area">
+                <img src="img/avatar.png" alt="user-avatar" class="user-avatar">
+                <div class="user-text">
+                    <b id="user-name">Somchai Nimidee</b>
+                    <br /><span id="user-email">somchai.ni@gmail.com</span>
+                </div>
+            </div>
+            <div class="menu">
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="location.href='home.html'">
+                    <div class="menu-btn-icon">
+                        <i class="material-icons menu-btn-icon">home</i>
+                        <span class="menu-btn-text">หน้าหลัก</span>
+                    </div>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="logout()">
+                    <div class="menu-btn-icon">
+                        <i class="material-icons menu-btn-icon">exit_to_app</i>
+                        <span class="menu-btn-text">ออกจากระบบ</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <h3 id="welcome">สวัสดีคุณ สมชาย นิมิตรดี (สาขา xxx)</h3>
+                <h5>
+                    <img src="img/cart.png" alt="cart" height="100" style="padding-right: 16px;">รายการสั่งซื้อสินค้า
+                    <span class="right-btn">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="confirmSO()" id="confitm-SO-btn">ยืนยันรายการสั่งซื้อ</button>
+                    </span>
+                </h5>
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="orderlist">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-all-1">
+                                    <input type="checkbox" id="checkbox-all-1" class="mdl-checkbox__input" onclick="checkedAll('orderlist', 'checkbox-all-1')">
+                                </label>
+                            </th>
+                            <th class="mdl-data-table__cell--non-numeric">เลขที่สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">ผู้สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่สั่งซื้อ</td>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่รับของ</td>
+                            <th class="mdl-data-table__cell--non-numeric">สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <h5>
+                    <img src="img/packing.png" alt="packing" height="100" style="padding-right: 16px;">อยู่ในระหว่างการบรรจุหีบห่อ
+                    <span class="right-btn">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="confirmPacking()" id="confirm-packing-btn">ยืนยันการบรรจุหีบห่อ</button>
+                    </span>
+                </h5>
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="packinglist">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-all-2">
+                                    <input type="checkbox" id="checkbox-all-2" class="mdl-checkbox__input" onclick="checkedAll('packinglist', 'checkbox-all-2')">
+                                </label>
+                            </th>
+                            <th class="mdl-data-table__cell--non-numeric">เลขที่สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">ผู้สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่สั่งซื้อ</td>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่รับของ</td>
+                            <th class="mdl-data-table__cell--non-numeric">สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <h5>
+                    <img src="img/delivery.png" alt="delivery" height="100" style="padding-right: 16px;">พร้อมส่งมอบ
+                </h5>
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="readylist">
+                    <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">เลขที่สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">ผู้สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่สั่งซื้อ</td>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่รับของ</td>
+                            <th class="mdl-data-table__cell--non-numeric">สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <h5>
+                    <img src="img/inv.png" alt="inv" height="100" style="padding-right: 16px;">ดำเนินการเสร็จสิ้นแล้ว
+                </h5>
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="paidlist">
+                    <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">เลขที่สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">ผู้สั่งซื้อ</th>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่สั่งซื้อ</td>
+                            <th class="mdl-data-table__cell--non-numeric">วันที่รับของ</td>
+                            <th class="mdl-data-table__cell--non-numeric">สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script>
+        // sample data
+        sample1 = [
+            {id: "ORD000010", buyer: "นายสมมติ ไร้ตัวตน", order_date: "1 Jul 2018", pickup_date: "3 Jul 2018", status: "RAISE"},
+            {id: "ORD000011", buyer: "นายสมมติ ไร้ตัวตน", order_date: "1 Jul 2018", pickup_date: "5 Jul 2018", status: "RAISE"},
+            {id: "ORD000012", buyer: "นายสมมติ ไร้ตัวตน", order_date: "1 Jul 2018", pickup_date: "10 Jul 2018", status: "RAISE"}
+        ]
+
+        sample2 = [
+            {id: "ORD000007", buyer: "นายสมมติ ไร้ตัวตน", order_date: "28 Jun 2018", pickup_date: "1 Jul 2018", status: "PACKING"},
+            {id: "ORD000008", buyer: "นายสมมติ ไร้ตัวตน", order_date: "29 Jun 2018", pickup_date: "2 Jul 2018", status: "PACKING"},
+            {id: "ORD000009", buyer: "นายสมมติ ไร้ตัวตน", order_date: "30 Jun 2018", pickup_date: "3 Jul 2018", status: "PACKING"}
+        ]
+
+        sample3 = [
+            {id: "ORD000004", buyer: "นายสมมติ ไร้ตัวตน", order_date: "27 Jun 2018", pickup_date: "1 Jul 2018", status: "READY"},
+            {id: "ORD000005", buyer: "นายสมมติ ไร้ตัวตน", order_date: "28 Jun 2018", pickup_date: "2 Jul 2018", status: "READY"},
+            {id: "ORD000006", buyer: "นายสมมติ ไร้ตัวตน", order_date: "29 Jun 2018", pickup_date: "2 Jul 2018", status: "READY"}
+        ]
+
+        sample4 = [
+            {id: "ORD000001", buyer: "นายสมมติ ไร้ตัวตน", order_date: "20 Jun 2018", pickup_date: "1 Jul 2018", status: "PAID"},
+            {id: "ORD000002", buyer: "นายสมมติ ไร้ตัวตน", order_date: "18 Jun 2018", pickup_date: "1 Jul 2018", status: "PAID"},
+            {id: "ORD000003", buyer: "นายสมมติ ไร้ตัวตน", order_date: "17 Jun 2018", pickup_date: "1 Jul 2018", status: "PAID"}
+        ]
+
+        function showDetail(id) {
+            window.location.href = "order.html?id="+id
+        }
+
+        function getTableClassByType(data) {
+            if (typeof(data) == 'number') {
+                return ''
+            } else {
+                return 'mdl-data-table__cell--non-numeric'
+            }
+        }
+
+        function getIconByStatus(status) {
+            switch(status) {
+                case "RAISE": return "fiber_new";
+                case "PACKING": return "schedule";
+                case "READY": return "local_shipping";
+                case "PAID": return "check_circle";
+            }
+        }
+
+        function assignTable(table_id, data, table_num, haveCheckbox=false, row_func=null) {
+            $("#"+table_id).find("tbody").empty()
+            data.map((x, index) => {
+                var format_data = []
+                format_data.push({text: x.id, class:getTableClassByType(x.id)})
+                format_data.push({text: x.buyer, class:getTableClassByType(x.buyer)})
+                format_data.push({text: x.order_date, class:getTableClassByType(x.order_date)})
+                format_data.push({text: x.pickup_date, class:getTableClassByType(x.pickup_date)})
+                format_data.push({text: x.status, class:getTableClassByType(x.status), icon: getIconByStatus(x.status)})
+                addTableBody(table_id, format_data, row_func, x.id, haveCheckbox, table_num+"-"+index)
+            })    
+        }
+
+        // init table
+        assignTable('orderlist', sample1, "1", true, showDetail)
+        assignTable('packinglist', sample2, "2", true, showDetail)
+        assignTable('readylist', sample3, "3", false, showDetail)
+        assignTable('paidlist', sample4, "4", false, showDetail)
+
+        function confirmSO() {
+            //openModal("เข้าสู่ระบบล้มเหลว", true, "ซื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง", "OK", closeModal, false)
+        }
+
+        function confirmPacking() {
+
+        }
+
+        function logout() {
+
+        }
+    </script>
+</body>
+
+</html>

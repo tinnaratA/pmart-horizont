@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Mitr:300,400&subset=thai');
+
+.fullbody {
+    width: 100%;
+    height: 100%;
+    font-family: 'Mitr', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, button.mdl-button {
+    font-family: 'Mitr', sans-serif;
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <script src="js/modal.js"></script>
+    <style>
+        .login-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 50%;
+            min-width: 360px;
+        }
+
+        .login-title {
+            background-color: #3f51b5;
+        }
+
+        .login-title-text {
+            color: white;
+            text-align: center;
+            width: 100%;
+            display: inline-block;
+        }
+
+        .login-content {
+            width: calc(100% - 32px);
+            height: 100%;
+        }
+
+        .login-textfield {
+            width: 75%;
+        }
+
+        .login-btn {
+            margin-bottom: 16px;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="fullbody">
+    <div class="login-container">
+        <div class="mdl-card mdl-shadow--4dp login-card">
+            <div class="mdl-card__title login-title">
+                <h2 class="mdl-card__title-text login-title-text">P-Mart Horizont</h2>
+            </div>
+            <div class="mdl-card__supporting-text login-content">
+                <form onsubmit="return false;">
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--12-col center">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label login-textfield">
+                                <input class="mdl-textfield__input" type="text" id="user">
+                                <label class="mdl-textfield__label" for="user">ชื่อผู้ใช้</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col center">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label login-textfield">
+                                <input class="mdl-textfield__input" type="password" id="pass">
+                                <label class="mdl-textfield__label" for="pass">รหัสผ่าน</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col center">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect login-btn" onclick="login()">
+                                เข้าสู่ระบบ
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            window.location.href = "home.html"
+            //openModal("เข้าสู่ระบบล้มเหลว", true, "ซื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง", "OK", closeModal, false)
+        }
+    </script>
+</body>
+
+</html>
