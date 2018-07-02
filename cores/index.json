@@ -1,0 +1,271 @@
+[
+    {
+        "id": "744f161f.8be888",
+        "type": "tab",
+        "label": "From Saleor",
+        "disabled": false,
+        "info": "# Data From Django Saleor"
+    },
+    {
+        "id": "502fb7d8.47f478",
+        "type": "tab",
+        "label": "From Preorder",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6e2073e8.ea592c",
+        "type": "tab",
+        "label": "Auto Fetch",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "f9d0b7c3.9b51e8",
+        "type": "subflow",
+        "name": "SMS",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": []
+            }
+        ],
+        "out": []
+    },
+    {
+        "id": "52acc240.71003c",
+        "type": "subflow",
+        "name": "Packing",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": []
+            }
+        ],
+        "out": []
+    },
+    {
+        "id": "398e8d54.5d0302",
+        "type": "subflow",
+        "name": "Update POS Stock",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": []
+            }
+        ],
+        "out": []
+    },
+    {
+        "id": "2b108439.09425c",
+        "type": "subflow",
+        "name": "Update Saleor Stock",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": []
+            }
+        ],
+        "out": []
+    },
+    {
+        "id": "e3c385af.fbe0b8",
+        "type": "comment",
+        "z": "744f161f.8be888",
+        "name": "Preorder Information",
+        "info": "This is the flow receiving the data from preorder\nand send to multiple target\n\n## Expected JSON\n\n\n    {\n        \"customer_name\": \"Somchai\",\n        \"customer_id\": \"CUST0001\",\n        \"orderitem\": [\n            {\n                \"sku\": \"124-24123\",\n                \"name\": \"ไก่แช่แข็ง\",\n                \"unit\": \"kg\",\n                \"unitprice\": 214,\n                \"qty\": 4,\n                \"total\" : 856\n            },\n            {\n                \"sku\": \"124-24122\",\n                \"name\": \"ไก่แช่แข็ง\",\n                \"unit\": \"kg\",\n                \"unitprice\": 214,\n                \"qty\": 4,\n                \"total\" : 856\n            }\n        ]\n        \"total\": 1702,\n        \"location\": \"CHIANGMAI_A01\",\n        \"pickupdatetime\": 1530538063,\n        \"created\": 1530538003,\n    }",
+        "x": 150,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "1a1c97e2.db7738",
+        "type": "http in",
+        "z": "744f161f.8be888",
+        "name": "",
+        "url": "/saleor/preorder",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "b16f7066.3b541",
+                "e2ceee97.db278"
+            ]
+        ]
+    },
+    {
+        "id": "b16f7066.3b541",
+        "type": "http response",
+        "z": "744f161f.8be888",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 410,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e2ceee97.db278",
+        "type": "function",
+        "z": "744f161f.8be888",
+        "name": "Gen Pincode",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 140,
+        "wires": [
+            [
+                "bde10b68.267308",
+                "f21d7957.ae44a8"
+            ]
+        ]
+    },
+    {
+        "id": "bde10b68.267308",
+        "type": "subflow:f9d0b7c3.9b51e8",
+        "z": "744f161f.8be888",
+        "name": "",
+        "x": 630,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f21d7957.ae44a8",
+        "type": "subflow:52acc240.71003c",
+        "z": "744f161f.8be888",
+        "name": "",
+        "x": 630,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d3cafdb1.94e5d",
+        "type": "comment",
+        "z": "502fb7d8.47f478",
+        "name": "Update Billing",
+        "info": "This is the flow receiving the data to update billing\n\n## Expected JSON\n\n\n    {\n        \"customer_name\": \"Somchai\",\n        \"customer_id\": \"CUST0001\",\n        \"orderitem\": [\n            {\n                \"sku\": \"124-24123\",\n                \"name\": \"ไก่แช่แข็ง\",\n                \"unit\": \"kg\",\n                \"unitprice\": 214,\n                \"qty\": 4,\n                \"total\" : 856\n            },\n            {\n                \"sku\": \"124-24122\",\n                \"name\": \"ไก่แช่แข็ง\",\n                \"unit\": \"kg\",\n                \"unitprice\": 214,\n                \"qty\": 4,\n                \"total\" : 856\n            }\n        ]\n        \"total\": 1702,\n        \"location\": \"CHIANGMAI_A01\",\n        \"pickupdatetime\": 1530538063,\n        \"created\": 1530538003,\n    }",
+        "x": 170,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "1eb94fd1.70233",
+        "type": "http in",
+        "z": "502fb7d8.47f478",
+        "name": "",
+        "url": "/preorder/billing",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "e803bba8.0d4a68",
+                "f814eb10.d1eef8"
+            ]
+        ]
+    },
+    {
+        "id": "e803bba8.0d4a68",
+        "type": "subflow:398e8d54.5d0302",
+        "z": "502fb7d8.47f478",
+        "name": "",
+        "x": 450,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f814eb10.d1eef8",
+        "type": "http response",
+        "z": "502fb7d8.47f478",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 410,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "8239e2ec.82f75",
+        "type": "inject",
+        "z": "6e2073e8.ea592c",
+        "name": "Fetch every 5 mins",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "300",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 200,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0cb8ac8.39b248",
+        "type": "comment",
+        "z": "6e2073e8.ea592c",
+        "name": "Update Stocks",
+        "info": "",
+        "x": 140,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "696ad874.3816c8",
+        "type": "http request",
+        "z": "6e2073e8.ea592c",
+        "name": "Stock API",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 410,
+        "y": 140,
+        "wires": [
+            [
+                "959ae882.9457e8"
+            ]
+        ]
+    },
+    {
+        "id": "959ae882.9457e8",
+        "type": "function",
+        "z": "6e2073e8.ea592c",
+        "name": "Modify Msg",
+        "func": "msg.payload = \n{\n    \"location\": \"CHIANGMAI_A01\",\n    \"itemlist\":[\n        {\n            \"sku\": \"124-24123\",\n            \"name\": \"ไก่แช่แข็ง\",\n            \"unit\": \"kg\",\n            \"unitprice\": 214,\n            \"qty\": 252,\n        },\n        {\n            \"sku\": \"124-24124\",\n            \"name\": \"PMART สันนอกหมูแล็ป\",\n            \"unit\": \"kg\",\n            \"unitprice\": 224,\n            \"qty\": 111,\n        },\n        {\n            \"sku\": \"124-24125\",\n            \"name\": \"PMART หมูเบคอนสด\",\n            \"unit\": \"kg\",\n            \"unitprice\": 124,\n            \"qty\": 252,\n        }\n    ]\n}\n    \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 140,
+        "wires": [
+            [
+                "be7fffbf.fc273"
+            ]
+        ]
+    },
+    {
+        "id": "be7fffbf.fc273",
+        "type": "subflow:2b108439.09425c",
+        "z": "6e2073e8.ea592c",
+        "name": "",
+        "x": 790,
+        "y": 140,
+        "wires": []
+    }
+]

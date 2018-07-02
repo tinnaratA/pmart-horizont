@@ -1,0 +1,15 @@
+{
+  "name": "eai",
+  "version": "1.0.0",
+  "description": "This is and application integration layer for control the project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node node_modules/node-red/red.js --settings settings.js index.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-red": "^0.18.7"
+  }
+}

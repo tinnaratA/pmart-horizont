@@ -15,12 +15,67 @@ preorder data will be send from this backend.
 
 Backend will consists of PostgreSQL to keep data and Django to act as an interface for the customers from outside
 
+#### Incoming Update Stock Data
 
-## Frontend (Nodejs)
-
-This is the application for backoffice to manage all of the incoming preorder. Clerks will use this systems to manage and pack all of the goods and ready for the customer to pickup the goods by customers using pin code.
+Incoming msg for update stocks will be like JSON below
 
 
-## EAI
+{
+    "location": "CHIANGMAI_A01",
+    "itemlist":[
+        {
+            "sku": "124-24123",
+            "name": "ไก่แช่แข็ง",
+            "unit": "kg",
+            "unitprice": 214,
+            "qty": 252,
+        },
+        {
+            "sku": "124-24124",
+            "name": "PMART สันนอกหมูแล็ป",
+            "unit": "kg",
+            "unitprice": 224,
+            "qty": 111,
+        },
+        {
+            "sku": "124-24125",
+            "name": "PMART หมูเบคอนสด",
+            "unit": "kg",
+            "unitprice": 124,
+            "qty": 252,
+        }
+    ]
+}
 
-This is an orchestrative program to direct all of the requests and manage all of the data. The preorder from backend Saleor will direct to EAI and EAI will generate SMS as well as send an update to the front to manage data 
+
+#### Message from Saleor
+
+Message from saleor to EAI will be this specs
+
+
+{
+        "customer_name": "Somchai",
+        "customer_id": "CUST0001",
+        "orderitem": [
+            {
+                "sku": "124-24123",
+                "name": "ไก่แช่แข็ง",
+                "unit": "kg",
+                "unitprice": 214,
+                "qty": 4,
+                "total" : 856
+            },
+            {
+                "sku": "124-24122",
+                "name": "ไก่แช่แข็ง",
+                "unit": "kg",
+                "unitprice": 214,
+                "qty": 4,
+                "total" : 856
+            }
+        ]
+        "total": 1702,
+        "location": "CHIANGMAI_A01",
+        "pickupdatetime": 1530538063,
+        "created": 1530538003,
+}
