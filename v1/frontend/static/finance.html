@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <style>
+            .fullbody {
+                width: 100%;
+                height: 100%;
+            }
+            .mdl-layout__drawer {
+                border: none;
+                width: 250px;
+            }
+            .user-area {
+                height: 150px;
+                background-image: url("img/user_bg.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .user-avatar {
+                position: 'absolute';
+                width: 60px;
+                height: 60px;
+                margin-top: 16px;
+                margin-left: 16px;
+            }
+            .user-text {
+                margin-top: 16px;
+                margin-left: 16px;
+                font-size: 16px;
+                text-shadow: 2px 2px 4px #000000;
+                color: white;
+            }
+            .menu {
+                margin-top: 8px;
+            }
+            .menu-btn {
+                width: 100%;
+                height: 48px;
+                text-align: left;
+            }
+            .menu-btn-icon {
+                display: flex;
+                align-items: center;
+                height: 48px;
+            }
+            .menu-btn-text {
+                margin-left: 24px;
+            }
+            .divider {
+                height: 1px;
+                width: 100%;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                background-color: #E0E0E0;
+            }
+            .custom-color-ripple .mdl-ripple {
+                background: #9E9E9E;
+            }
+            .page-content {
+                width: calc(100% - 32px);
+                padding: 16px;
+            }
+            .float-btn {
+                position: fixed;
+                right: 16px;
+                bottom: 16px;
+            }
+            .full-width {
+                width: 100%;
+            }
+            #invlist th {
+                background-color: #1e88e5;
+            }
+            #invlist tr:nth-child(even){
+                background-color: #e1f5fe;
+            }
+            #invlist tbody > tr:hover {
+                background-color: #84ffff;
+            }
+            #invlist.mdl-data-table th {
+                color: white;
+            }
+            .status_row {
+                vertical-align: middle;
+                margin-right: 8px;
+            }
+            .modal {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-flex-wrap: nowrap;
+                -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
+                left: 20%;
+                width: 60%;
+                height: 60%;
+                position: absolute;
+                box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+                box-sizing: border-box;
+                border-right: 1px solid #e0e0e0;
+                background: #fafafa;
+                -webkit-transform: translateY(-102%);
+                -ms-transform: translateY(-102%);
+                transform: translateY(-102%);
+                -webkit-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+                will-change: transform;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                -webkit-transition-property: -webkit-transform;
+                transition-property: transform;
+                color: #424242;
+                overflow: visible;
+                overflow-y: auto;
+                z-index: 5;
+            }
+            .modal-obfuscator {
+                background-color: transparent;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 4;
+                visibility: hidden;
+                -webkit-transition-property: background-color;
+                transition-property: background-color;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+            }
+            .ob-active {
+                background-color: rgba(0,0,0,.5);
+                visibility: visible;
+            }
+            .modal-active {
+                -webkit-transform: translateY(30%);
+                -ms-transform: translateY(30%);
+                transform: translateY(30%);  
+            }
+            .modal-container {
+                width: calc(100% - 32px);
+                height: 100%;
+                padding: 16px;
+            }
+            .modal-title {
+                margin: 16px 0 16px;
+                font-size: 1.5em;
+            }
+            .modal-content {
+                margin-top: 16px;
+            }
+            .modal-action {
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+            }
+            .modal-btn-hide {
+                display: none;
+            }
+            a.mdl-navigation__link {
+                cursor: pointer;
+            }
+        </style>
+    </header>
+    <body class="fullbody">
+        <div class="mdl-layout mdl-js-layout mdl-layout--fix-header">
+            <header class="mdl-layout__header">
+                    <div class="mdl-layout__header-row">
+                        <span class="mdl-layout-title">Horizont</span>
+                        <div class="mdl-layout-spacer"></div>
+                        <nav class="mdl-navigation">
+                            <a class="mdl-navigation__link" onclick="logout()">ออกจากระบบ</a>
+                        </nav>
+                    </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <div class="user-area">
+                    <img src="img/avatar.png" alt="user-avatar" class="user-avatar">
+                    <div class="user-text">
+                        <b id="user-name">Somchai Nimidee</b>
+                        <br /><span id="user-email">somchai.ni@gmail.com</span>
+                    </div>
+                </div>
+                <div class="menu">
+                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="location.href='finance.html'">
+                            <div class="menu-btn-icon">
+                                <i class="material-icons menu-btn-icon">home</i>
+                                <span class="menu-btn-text">หน้าหลัก</span>
+                            </div>
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="logout()">
+                        <div class="menu-btn-icon">
+                            <i class="material-icons menu-btn-icon">exit_to_app</i>
+                            <span class="menu-btn-text">ออกจากระบบ</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <h3 id="hello">Hello! Finance</h3>
+                    <h5>
+                        <img src="img/inv.png" alt="inv" height="100" style="padding-right: 16px;">รายการใบกำกับสินค้า
+                    </h5>
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="invlist">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Invoice ID</th>
+                                <th class="mdl-data-table__cell--non-numeric">Purchase Order ID</td>
+                                <th class="mdl-data-table__cell--non-numeric">Vendor</td>
+                                <th class="mdl-data-table__cell--non-numeric">Date</td>
+                                <th class="mdl-data-table__cell--non-numeric">Delivery Date</td>
+                                <th>Total</td>
+                                <th class="mdl-data-table__cell--non-numeric">Status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            var saleinfo = JSON.parse(localStorage.getItem("login"))
+            
+            function showdata(id){
+                window.location.href = "finance_confirm.html?id="+id
+            }
+
+            function logout(){
+                $.ajax({
+                    method: "POST",
+                    url: "http://139.99.106.240:2002/users/logout",
+                    data: {"username": saleinfo.username, "password": saleinfo.password}
+                })
+                .done((data) => {
+                    location.href='index.html';
+                })
+                .fail((data) => {
+                    var responsedata = data.responseJSON;
+                    openModal("Error", true, "Status: " + responsedata.success + "<br>" + "Message: " + responsedata.data, "OK", closeModal, false);
+                });
+            }
+
+            function refreshMDL() {
+                componentHandler.upgradeDom();
+            }
+            
+            $(".modal-obfuscator").click(function() {
+                closeModal();
+            });
+
+            function closeModal() {
+                $(".modal").removeClass("modal-active");
+                $(".modal-obfuscator").removeClass("ob-active");
+            }
+
+            function openModal(title, isText, content, action, action_func, isClosable) {
+                var modal_title = $("#modal-title");
+                var modal_content = $("#modal-content");
+                var modal_action = $("#modal-action");
+                var modal_close = $("#modal-close");
+
+                modal_title.empty();
+                modal_content.empty();
+                modal_action.empty();
+                modal_action.off("click");
+
+                modal_title.text(title);
+                if (isText) {
+                    modal_content.html(content);
+                } else {
+                    modal_content.append(content);
+                }
+                
+                modal_action.text(action);
+                modal_action.click(action_func);
+
+                if (isClosable) {
+                    modal_close.removeClass("modal-btn-hide");
+                } else {
+                    modal_close.addClass("modal-btn-hide");
+                }
+
+                $(".modal").addClass("modal-active");
+                $(".modal-obfuscator").addClass("ob-active");
+
+                refreshMDL();
+            }
+
+            function add_to_table_inv(data){
+                var now = new Date(data.date);
+                var delivery_date = new Date(data.delivery)
+
+                var row = $("<tr onclick='showdata(\""+data._id+"\")'></tr>");
+                
+                var col1 = $("<td />", {
+                    text: data.id,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col1_1 = $("<td />", {
+                    text: data.purchaseOrder,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col1_2 = $("<td />", {
+                    text: data.vendor,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col2 = $("<td />", {
+                    text: now.toDateString() + " " + now.toLocaleTimeString(),
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col3 = $("<td />", {
+                    text: delivery_date.toDateString() + " " + delivery_date.toLocaleTimeString(),
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col4 = $("<td />", {
+                    text:  (data.total * 0.95).toFixed(2)
+                });
+
+                var status_img;
+                switch(data.status){
+                    case "RAISED": status_img = "fiber_new"; break;
+                    case "CONFIRMED": status_img = "event_available"; break;
+                    case "PAID": status_img = "check_circle"; break;
+                }
+                var col5 = $("<td />", {
+                    html: "<i class='material-icons status_row'>"+status_img+"</i><span>"+data.status+"</span>",
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+        
+
+                row.append(col1).append(col1_1).append(col1_2).append(col2).append(col3).append(col4).append(col5)
+                $("#invlist").find('tbody').append(row);
+
+            }
+            
+            $.get("http://139.99.106.240:2002/invoices/list").done(
+                (data) => {
+                    var invoices = data.data;
+                    invoices.map(add_to_table_inv);
+                }
+            );
+            
+            $("#hello").html("สวัสดี คุณ: "+saleinfo.name);
+
+            updateDrawerUser()
+            function updateDrawerUser() {
+                $("#user-name").text(saleinfo.name ? saleinfo.name : "" + " " + saleinfo.surname ? saleinfo.surname : "")
+                $("#user-email").text(saleinfo.email ? saleinfo.email : "")
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <style>
+            .fullbody {
+                width: 100%;
+                height: 100%;
+            }
+            .mdl-layout__drawer {
+                border: none;
+                width: 250px;
+            }
+            .user-area {
+                height: 150px;
+                background-image: url("img/user_bg.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .user-avatar {
+                position: 'absolute';
+                width: 60px;
+                height: 60px;
+                margin-top: 16px;
+                margin-left: 16px;
+            }
+            .user-text {
+                margin-top: 16px;
+                margin-left: 16px;
+                font-size: 16px;
+                text-shadow: 2px 2px 4px #000000;
+                color: white;
+            }
+            .menu {
+                margin-top: 8px;
+            }
+            .menu-btn {
+                width: 100%;
+                height: 48px;
+                text-align: left;
+            }
+            .menu-btn-icon {
+                display: flex;
+                align-items: center;
+                height: 48px;
+            }
+            .menu-btn-text {
+                margin-left: 24px;
+            }
+            .divider {
+                height: 1px;
+                width: 100%;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                background-color: #E0E0E0;
+            }
+            .custom-color-ripple .mdl-ripple {
+                background: #9E9E9E;
+            }
+            .page-content {
+                width: calc(100% - 48px);
+                padding: 24px;
+            }
+            .full-width {
+                width: 100%;
+            }
+            .modal {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-flex-wrap: nowrap;
+                -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
+                left: 20%;
+                width: 60%;
+                height: 60%;
+                position: absolute;
+                box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+                box-sizing: border-box;
+                border-right: 1px solid #e0e0e0;
+                background: #fafafa;
+                -webkit-transform: translateY(-102%);
+                -ms-transform: translateY(-102%);
+                transform: translateY(-102%);
+                -webkit-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+                will-change: transform;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                -webkit-transition-property: -webkit-transform;
+                transition-property: transform;
+                color: #424242;
+                overflow: visible;
+                overflow-y: auto;
+                z-index: 5;
+            }
+            .modal-obfuscator {
+                background-color: transparent;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 4;
+                visibility: hidden;
+                -webkit-transition-property: background-color;
+                transition-property: background-color;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+            }
+            .ob-active {
+                background-color: rgba(0,0,0,.5);
+                visibility: visible;
+            }
+            .modal-active {
+                -webkit-transform: translateY(30%);
+                -ms-transform: translateY(30%);
+                transform: translateY(30%);  
+            }
+            .modal-container {
+                width: calc(100% - 32px);
+                height: 100%;
+                padding: 16px;
+            }
+            .modal-title {
+                margin: 16px 0 16px;
+                font-size: 1.5em;
+            }
+            .modal-content {
+                margin-top: 16px;
+            }
+            .modal-action {
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+            }
+            .modal-btn-hide {
+                display: none;
+            }
+            .radio {
+                height: 100px;
+            }
+            .small-textfield {
+                margin-left: 8px;
+                width: 100px;
+            }
+            .mdl-button.icon48 {
+                width: 48px;
+                height: 48px;
+            }
+            .material-icons.icon48 {
+                font-size: 48px;
+                width: 48px;
+                height: 48px;
+                -webkit-transform: translate(-24px,-12px);
+                transform: translate(-24px,-12px);
+            }
+            #preorder th {
+                background-color: #1e88e5;
+            }
+            #preorder tr:nth-child(even){
+                background-color: #e1f5fe;
+            }
+            #preorder tfoot > tr {
+                background-color: #1e88e5;
+                color: white;
+            }
+            #preorder tbody > tr:hover {
+                background-color: #84ffff;
+            }
+            #preorder.mdl-data-table th {
+                color: white;
+            }
+            #grandtotal {
+                font-weight: bold;
+            }
+            .bottom-right {
+                width: 100%;
+                margin-top: 24px;
+                text-align: right;
+            }
+            a.mdl-navigation__link {
+                cursor: pointer;
+            }
+            .thumbnail {
+                height: 100px;
+            }
+            .align-right {
+                text-align: right;
+                margin-bottom: 8px;
+            }
+        </style>
+    </header>
+    <body class="fullbody">
+        <div class="mdl-layout mdl-js-layout mdl-layout--fix-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <span class="mdl-layout-title">Horizont</span>
+                        <div class="mdl-layout-spacer"></div>
+                        <nav class="mdl-navigation">
+                            <a class="mdl-navigation__link" onclick="logout()">Log out</a>
+                        </nav>
+                    </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <div class="user-area">
+                    <img src="img/avatar.png" alt="user-avatar" class="user-avatar">
+                    <div class="user-text">
+                        <b id="user-name">Somchai Nimidee</b>
+                        <br /><span id="user-email">somchai.ni@gmail.com</span>
+                    </div>
+                </div>
+                <div class="menu">
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="location.href='finance.html'">
+                        <div class="menu-btn-icon">
+                            <i class="material-icons menu-btn-icon">home</i>
+                            <span class="menu-btn-text">Home</span>
+                        </div>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="logout()">
+                        <div class="menu-btn-icon">
+                            <i class="material-icons menu-btn-icon">exit_to_app</i>
+                            <span class="menu-btn-text">Log Out</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="modal">
+                    <div class="modal-container">
+                        <div class="modal-title" id="modal-title"></div>
+                        <div class="divider"></div>
+                        <div class="modal-content" id="modal-content"></div>
+                        <div class="modal-action">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="modal-action">
+                                OK
+                            </button>
+                            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" style="margin-left: 8px;" onclick="closeModal()" id="modal-close">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-obfuscator"></div>    
+            <main>
+                <div class="page-content">
+                    <h3>
+                        <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored icon48" onclick="location.href='finance.html'">
+                            <i class="material-icons icon48">navigate_before</i>
+                        </button>
+                        <span id="headdata"></span>
+                    </h3>
+                    <form onsubmit="return false;">
+                        <h4 id="podata"></h3>
+                        <h4 id="sodata"></h3>
+                        <div class="align-right" style="margin-top: 16px;">
+                            <div class="mdl-spinner mdl-js-spinner" id="loader"></div>
+                            <button class="mdl-button mdl-js-button mdl-button--icon" id="print-btn" onclick="onPrint()">
+                                <i class="material-icons">print</i>
+                            </button>
+                        </div>
+                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="preorder">
+                            <thead>
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric">ID</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Image</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                    <th>Unit Price</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Unit</th>
+                                    <th>Quantity</th>
+                                    <th>Delivered</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                                
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7"><b>Total:</b></td>
+                                    <td id='total'>0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <h5>Delivery Date: <span id="delivery"></span></h5>
+                        <h5>Status: <span id="status"></span></h5>
+                        <div class="bottom-right" id="conf">
+                            <div class="mdl-textfield mdl-js-textfield" style="width: 200px;">
+                                <input class="mdl-textfield__input" type="text" id="auth">
+                                <label class="mdl-textfield__label" for="auth">Authorised Code(1234)</label>
+                            </div>
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="confirm()" style="margin-left: 8px;">Approve Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <script>
+            $(".modal-obfuscator").click(function() {
+                closeModal();
+            });
+    
+            function openModal(title, isText, content, action, action_func, isClosable) {
+                var modal_title = $("#modal-title");
+                var modal_content = $("#modal-content");
+                var modal_action = $("#modal-action");
+                var modal_close = $("#modal-close");
+    
+                modal_title.empty();
+                modal_content.empty();
+                modal_action.empty();
+                modal_action.off("click");
+    
+                modal_title.text(title);
+                if (isText) {
+                    modal_content.html(content);
+                } else {
+                    modal_content.append(content);
+                }
+                    
+                modal_action.text(action);
+                modal_action.click(action_func);
+    
+                if (isClosable) {
+                    modal_close.removeClass("modal-btn-hide");
+                } else {
+                    modal_close.addClass("modal-btn-hide");
+                }
+    
+                $(".modal").addClass("modal-active");
+                $(".modal-obfuscator").addClass("ob-active");
+                refreshMDL();
+            }
+    
+            function closeModal() {
+                $(".modal").removeClass("modal-active");
+                $(".modal-obfuscator").removeClass("ob-active");
+            }
+    
+            function refreshMDL() {
+                componentHandler.upgradeDom();
+            }
+    
+            function showdata(id, type){
+                window.location.href = "finance_confirm.html?id="+ id;
+            }
+
+            $("#approve-payment").hide() 
+   
+            function $_GET(sParam) {
+                var strparams = window.location.search.replace("?", "").split("&");
+                var params = {};
+                strparams.map(p => {
+                    temp = p.split("=");
+                    params[temp[0]] = temp[temp.length - 1];
+                });
+                return params[sParam];
+            }
+
+        
+            function confirm() {
+                inv = get_data;
+                inv.status = "PAID";
+                
+                if($("#auth").val() != "1234"){
+                    openModal("Fail", true, "Invalid Authorised Code.", "OK", () => window.location = "./finance_confirm.html?id=" + order._id , false);
+                    return;
+                }
+
+                $.ajax('http://139.99.106.240:2002/invoices/edit/'+ inv._id, {
+                    data: JSON.stringify(inv),
+                    contentType: 'application/json',
+                    type: 'PUT'
+                }).done(
+                    () => {
+                        openModal("Success", true, "Invoice has been confirmed to paid.", "OK", () => window.location = "./finance.html", false);
+                    }
+                );
+            }
+
+            var get_data = []
+            globid = 1;
+            function addPreorder(data) {
+                var row = $("<tr onclick='showdata(\""+data._id+"\")'></tr>");
+
+                index = globid;
+                var col1 = $("<td />", {
+                    text: index,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col2 = $("<td />", {
+                    class: "mdl-data-table__cell--non-numeric"
+                }).append("<img src='"+data.image+"' class='thumbnail' />");
+                var col3 = $("<td />", {
+                    id: 'product' + index,
+                    text: data.item,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col4 = $("<td />", {
+                    text: (data.unitprice * 0.95).toFixed(2),
+                    id: 'unitprice' + index
+                });
+                var col5 = $("<td />", {
+                    id: 'unit' + index,
+                    text: data.unit,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col6 = $("<td />", {
+                    id: 'qty' + index,
+                    text: data.qty
+                });
+                var col7 = $("<td />", {
+                    id: 'delivered' + index,
+                    text: data.delivered ? data.delivered : 0
+                });
+                var col8 = $("<td />", {
+                    id: 'price' + index,
+                    text: (data.price).toFixed(2)
+                });
+
+                globid++;
+
+                row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6).append(col7).append(col8)
+                $("#preorder").find('tbody').append(row);
+
+            }
+
+            $("#conf").hide()
+            $("#print-btn").hide()
+            $("#loader").hide()
+
+            $.get("http://139.99.106.240:2002/invoices/" + $_GET('id'))
+            .done(
+                (data) => {
+                    var inv = data.data;
+                    inv.items.map(addPreorder);
+                    $("#total").text((inv.total).toFixed(2));
+
+                    $("#headdata").html("INV: " + inv.id);
+                    $("#sodata").html("SO: " + inv.id);
+
+                    var delivery_date = new Date(inv.delivery);
+                    $("#delivery").html(delivery_date.toDateString() + " " + delivery_date.toLocaleTimeString());
+                    $("#status").html(inv.status);
+
+                    if (inv.status == "CONFIRMED") {
+                        $("#conf").show()
+                    }
+                    else if (inv.status == "PAID") {
+                        $("#print-btn").show()
+                        $("#loader").show()
+                    }
+
+                    get_data = inv;
+                }
+            )
+
+            var saleinfo = JSON.parse(localStorage.getItem("login"))
+            function logout(){
+                $.ajax({
+                    method: "POST",
+                    url: "http://139.99.106.240:2002/users/logout",
+                    data: {"username": saleinfo.username, "password": saleinfo.password}
+                })
+                .done((data) => {
+                    location.href='index.html';
+                })
+                .fail((data) => {
+                    var responsedata = data.responseJSON;
+                    openModal("Error", true, "Status: " + responsedata.success + "<br>" + "Message: " + responsedata.data, "OK", closeModal, false);
+                });
+            }
+
+            updateDrawerUser()
+            function updateDrawerUser() {
+                $("#user-name").text(saleinfo.name ? saleinfo.name : "" + " " + saleinfo.surname ? saleinfo.surname : "")
+                $("#user-email").text(saleinfo.email ? saleinfo.email : "")
+            }
+
+            function onPrint() {
+                $("#print-btn").attr("disabled", true)
+                $("#loader").addClass("is-active")
+
+                $.ajax({
+                    method : "GET",
+                    url: "/pdf/invoice/"+$_GET('id'),
+                })
+                .done((data) => {
+                    location.href=data.path;
+                })
+                .always(() => {
+                    $("#print-btn").attr("disabled", false)
+                    $("#loader").removeClass("is-active")
+                });
+            }
+        </script>
+    </body>
+</html>

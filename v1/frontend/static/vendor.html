@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <style>
+            .fullbody {
+                width: 100%;
+                height: 100%;
+            }
+            .mdl-layout__drawer {
+                border: none;
+                width: 250px;
+            }
+            .user-area {
+                height: 150px;
+                background-image: url("img/user_bg.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .user-avatar {
+                position: 'absolute';
+                width: 60px;
+                height: 60px;
+                margin-top: 16px;
+                margin-left: 16px;
+            }
+            .user-text {
+                margin-top: 16px;
+                margin-left: 16px;
+                font-size: 16px;
+                text-shadow: 2px 2px 4px #000000;
+                color: white;
+            }
+            .menu {
+                margin-top: 8px;
+            }
+            .menu-btn {
+                width: 100%;
+                height: 48px;
+                text-align: left;
+            }
+            .menu-btn-icon {
+                display: flex;
+                align-items: center;
+                height: 48px;
+            }
+            .menu-btn-text {
+                margin-left: 24px;
+            }
+            .divider {
+                height: 1px;
+                width: 100%;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                background-color: #E0E0E0;
+            }
+            .custom-color-ripple .mdl-ripple {
+                background: #9E9E9E;
+            }
+            .page-content {
+                width: calc(100% - 48px);
+                padding: 24px;
+            }
+            .full-width {
+                width: 100%;
+            }
+            #orderlist th {
+                background-color: #1e88e5;
+            }
+            #orderlist tr:nth-child(even){
+                background-color: #e1f5fe;
+            }
+            #orderlist tbody > tr:hover {
+                background-color: #84ffff;
+            }
+            #polist th {
+                background-color: #43a047;
+            }
+            #polist tr:nth-child(even){
+                background-color: #dcedc8;
+            }
+            #polist tbody > tr:hover {
+                background-color: #ccff90;
+            }
+            #invlist th {
+                background-color: #d81b60;
+            }
+            #invlist tr:nth-child(even){
+                background-color: #f8bbd0;
+            }
+            #invlist tbody > tr:hover {
+                background-color: #ff80ab;
+            }
+            #orderlist.mdl-data-table th, 
+            #polist.mdl-data-table th, 
+            #invlist.mdl-data-table th {
+                color: white;
+            }
+            .status_row {
+                vertical-align: middle;
+                margin-right: 8px;
+            }
+            .modal {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-flex-wrap: nowrap;
+                -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
+                left: 20%;
+                width: 60%;
+                height: 60%;
+                position: absolute;
+                box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+                box-sizing: border-box;
+                border-right: 1px solid #e0e0e0;
+                background: #fafafa;
+                -webkit-transform: translateY(-102%);
+                -ms-transform: translateY(-102%);
+                transform: translateY(-102%);
+                -webkit-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+                will-change: transform;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                -webkit-transition-property: -webkit-transform;
+                transition-property: transform;
+                color: #424242;
+                overflow: visible;
+                overflow-y: auto;
+                z-index: 5;
+            }
+            .modal-obfuscator {
+                background-color: transparent;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 4;
+                visibility: hidden;
+                -webkit-transition-property: background-color;
+                transition-property: background-color;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+            }
+            .ob-active {
+                background-color: rgba(0,0,0,.5);
+                visibility: visible;
+            }
+            .modal-active {
+                -webkit-transform: translateY(30%);
+                -ms-transform: translateY(30%);
+                transform: translateY(30%);  
+            }
+            .modal-container {
+                width: calc(100% - 32px);
+                height: 100%;
+                padding: 16px;
+            }
+            .modal-title {
+                margin: 16px 0 16px;
+                font-size: 1.5em;
+            }
+            .modal-content {
+                margin-top: 16px;
+            }
+            .modal-action {
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+            }
+            .modal-btn-hide {
+                display: none;
+            }
+            a.mdl-navigation__link {
+                cursor: pointer;
+            }
+            .right-btn {
+                position: absolute;
+                right: 24px;
+                padding-top: 60px;
+            }
+            .thumbnail {
+                height: 100px;
+            }
+        </style>
+    </header>
+    <body class="fullbody">
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <span class="mdl-layout-title">Horizont</span>
+                    <div class="mdl-layout-spacer"></div>
+                    <nav class="mdl-navigation">
+                        <a class="mdl-navigation__link" onclick="logout()">ออกจากระบบ</a>
+                    </nav>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <div class="user-area">
+                    <img src="img/avatar.png" alt="user-avatar" class="user-avatar">
+                    <div class="user-text">
+                        <b id="user-name">Somchai Nimidee</b>
+                        <br /><span id="user-email">somchai.ni@gmail.com</span>
+                    </div>
+                </div>
+                <div class="menu">
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="location.href='vendor.html'">
+                        <div class="menu-btn-icon">
+                            <i class="material-icons menu-btn-icon">home</i>
+                            <span class="menu-btn-text">หน้าหลัก</span>
+                        </div>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect custom-color-ripple menu-btn" onclick="logout()">
+                        <div class="menu-btn-icon">
+                            <i class="material-icons menu-btn-icon">exit_to_app</i>
+                            <span class="menu-btn-text">ออกจากระบบ</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="modal">
+                <div class="modal-container">
+                    <div class="modal-title" id="modal-title"></div>
+                    <div class="divider"></div>
+                    <div class="modal-content" id="modal-content"></div>
+                    <div class="modal-action">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="modal-action">
+                            ตกลง
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" style="margin-left: 8px;" onclick="closeModal()" id="modal-close">
+                            ปิด
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-obfuscator"></div>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <h3 id="hello">Hello! Vendor 00001: PC FOOD CENTER CO.,LTD.</h3>
+                    <h5>
+                        <img src="img/so.png" alt="SO" height="100" style="padding-right: 16px;">รายการสั่งซื้อของร้านค้า
+                        <span class="right-btn">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="generate_purchase_order()" id="create-PO-btn">เพิ่มรายการสั่งซื้อ</button>
+                        </span>
+                    </h5>
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="orderlist">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-all-1">
+                                        <input type="checkbox" id="checkbox-all-1" class="mdl-checkbox__input" onclick="checkedAll('orderlist', 'checkbox-all-1')">
+                                    </label>
+                                </th>
+                                <th class="mdl-data-table__cell--non-numeric">เลขที่</th>
+                                <th class="mdl-data-table__cell--non-numeric">ภาพตัวอย่าง</th>
+                                <th class="mdl-data-table__cell--non-numeric">รายการ</td>
+                                <th class="mdl-data-table__cell--non-numeric">วันส่ง</th>
+                                <th class="mdl-data-table__cell--non-numeric">หน่วย</th>
+                                <th>หน่วยละ</th>
+                                <th>จำนวน</th>
+                                <th>ราคา</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <h5>
+                        <img src="img/po.png" alt="PO" height="100" style="padding-right: 16px;">รายการสั่งซื้อ
+                        <span class="right-btn">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="generate_invoice()" id="create-INV-btn">สร้างใบกำกับสินค้า</button>
+                        </span>
+                    </h5>
+                    
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="polist">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-all-2">
+                                        <input type="checkbox" id="checkbox-all-2" class="mdl-checkbox__input" onclick="checkedAll('polist', 'checkbox-all-2')">
+                                    </label>
+                                </th>
+                                <th class="mdl-data-table__cell--non-numeric">เลขที่</th>
+                                <th class="mdl-data-table__cell--non-numeric">ผู้ดำเนินการ</td>
+                                <th class="mdl-data-table__cell--non-numeric">วันที่</th>
+                                <th class="mdl-data-table__cell--non-numeric">วันส่ง</th>
+                                <th>ราคา</th>
+                                <th class="mdl-data-table__cell--non-numeric">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <h5>
+                        <img src="img/inv.png" alt="inv" height="100" style="padding-right: 16px;">ใบกำกับสินค้า
+                        <span class="right-btn">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="confirm_invoice()" id="confirm-INV-btn">ยืนยันใบกำกับสินค้า</button>
+                        </span>
+                    </h5>
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width" id="invlist">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-all-3">
+                                        <input type="checkbox" id="checkbox-all-3" class="mdl-checkbox__input" onclick="checkedAll('invlist', 'checkbox-all-3')">
+                                    </label>
+                                </th>
+                                <th class="mdl-data-table__cell--non-numeric">เลขที่</th>
+                                <th class="mdl-data-table__cell--non-numeric">เลขที่รายการสั่งซื้อของร้านค้า</td>
+                                <th class="mdl-data-table__cell--non-numeric">วันที่</th>
+                                <th class="mdl-data-table__cell--non-numeric">วันส่ง</th>
+                                <th>ราคา</th>
+                                <th class="mdl-data-table__cell--non-numeric">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+        <script>
+            var userinfo = JSON.parse(localStorage.getItem("login"));
+            var global_so_id = 1;
+            var global_po_id = 1;
+            var global_inv_id = 1;
+
+            $(".page-content").find(".mdl-checkbox__input").prop("checked", false).parent().removeClass("is-checked");
+
+            function showdata(id, type){
+                window.location.href = "vendor_confirm.html?id="+id+"&type="+type
+            }
+            
+            function logout(){
+                $.ajax({
+                    method: "POST",
+                    url: "http://139.99.106.240:2002/users/logout",
+                    data: {"username": userinfo.username, "password": userinfo.password}
+                })
+                .done((data) => {
+                    location.href='index.html';
+                })
+                .fail((data) => {
+                    var responsedata = data.responseJSON;
+                    openModal("Error", true, "Status: " + responsedata.success + "<br>" + "Message: " + responsedata.data, "OK", closeModal, false);
+                });
+            }
+
+            function refreshMDL() {
+                componentHandler.upgradeDom();
+            }
+            
+            $(".modal-obfuscator").click(function() {
+                closeModal();
+            });
+
+            function closeModal() {
+                $(".modal").removeClass("modal-active");
+                $(".modal-obfuscator").removeClass("ob-active");
+            }
+
+            function openModal(title, isText, content, action, action_func, isClosable) {
+                var modal_title = $("#modal-title");
+                var modal_content = $("#modal-content");
+                var modal_action = $("#modal-action");
+                var modal_close = $("#modal-close");
+
+                modal_title.empty();
+                modal_content.empty();
+                modal_action.empty();
+                modal_action.off("click");
+
+                modal_title.text(title);
+                if (isText) {
+                    modal_content.html(content);
+                } else {
+                    modal_content.append(content);
+                }
+                
+                modal_action.text(action);
+                modal_action.click(action_func);
+
+                if (isClosable) {
+                    modal_close.removeClass("modal-btn-hide");
+                } else {
+                    modal_close.addClass("modal-btn-hide");
+                }
+
+                $(".modal").addClass("modal-active");
+                $(".modal-obfuscator").addClass("ob-active");
+
+                refreshMDL();
+            }
+
+            function add_to_table(data, i){
+                row = $("<tr></tr>");
+                
+                var index = global_so_id;
+                var col1 = $("<td />")
+                    .append($("<label />", {class: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect", for: "checkbox-1-"+index, click: () => onSeleted("1-"+index)})
+                    .append($("<input />", {type: "checkbox", class: "mdl-checkbox__input", id: "checkbox-1-"+index}))
+                );
+                var col2 = $("<td />", {
+                    text: data.id,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col3 = $("<td />", {
+                    class: "mdl-data-table__cell--non-numeric"
+                }).append("<img src='"+data.arrayitem[i].image+"' class='thumbnail' />");
+                var col4 = $("<td />", {
+                    text: data.arrayitem[i].item,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col5 = $("<td />", {
+                    text: data.delivery,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col6 = $("<td />", {
+                    text: data.arrayitem[i].unit,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col7 = $("<td />", {
+                    text: (data.arrayitem[i].unitprice * 0.95).toFixed(2)
+                });
+                var col8 = $("<td />", {
+                    text: data.arrayitem[i].qty
+                });
+                var col9 = $("<td />", {
+                    text: (data.arrayitem[i].unitprice * data.arrayitem[i].qty * 0.95).toFixed(2)
+                });
+            
+                global_so_id++;
+                row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6).append(col7).append(col8).append(col9);
+                $("#orderlist").find('tbody').append(row);
+            }
+
+            function add_to_table_delivery(data){
+                var now = new Date(data.date);
+                var delivery_date = new Date(data.delivery);
+
+                var index = global_po_id;
+                var row = $("<tr />", {click: (evt) => {
+                    var $cell=$(evt.target).closest('td');
+                    if( $cell.index()>0){
+                        showdata(data._id, "PO")
+                    }
+                }});
+                var col1 = $("<td />")
+                    .append($("<label />", {class: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect", for: "checkbox-2-"+index, click: () => onSeleted("2-"+index)})
+                    .append($("<input />", {type: "checkbox", class: "mdl-checkbox__input", id: "checkbox-2-"+index, disabled: data.processed ? true : data.status == "DELIVERED" ? false : true}))
+                );
+                var col2 = $("<td />", {
+                    text: data.id,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col3 = $("<td />", {
+                    text: userinfo.name,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col4 = $("<td />", {
+                    text: now.toDateString() + " " + now.toLocaleTimeString(),
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col5 = $("<td />", {
+                    text: delivery_date.toDateString() + " " + delivery_date.toLocaleTimeString(),
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col6 = $("<td />", {
+                    text: (data.total * 0.95).toFixed(2)
+                });
+
+                var status_img;
+                switch(data.status){
+                    case "RAISED": status_img = "local_shipping"; break;
+                    case "DELIVERED": status_img = "check_circle"; break;
+                    case "DELIVERING": status_img = "hourglass_empty"; break;
+                }
+                var col7 = $("<td />", {
+                    html: "<i class='material-icons status_row'>"+status_img+"</i><span>"+data.status+"</span>",
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+        
+                global_po_id++;
+                row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6).append(col7);
+                $("#polist").find('tbody').append(row);
+            }
+            
+            function add_to_table_inv(data){
+
+                var now = new Date(data.date);
+                var delivery_date = new Date(data.delivery);
+
+                var index = global_inv_id;
+                var row = $("<tr />", {click: (evt) => {
+                    var $cell=$(evt.target).closest('td');
+                    if( $cell.index()>0){
+                        showdata(data._id, "INV")
+                    }
+                }});
+                dis_button = true
+                if(data.status == "RAISED") dis_button = false
+                var col1 = $("<td />")
+                    .append($("<label />", {class: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect", for: "checkbox-3-"+index, click: () => onSeleted("3-"+index)})
+                    .append($("<input />", {type: "checkbox", class: "mdl-checkbox__input", id: "checkbox-3-"+index, disabled: dis_button}))
+                );
+                var col2 = $("<td />", {
+                    text: data.id,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col3 = $("<td />", {
+                    text: data.purchaseOrder,
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col4 = $("<td />", {
+                    text: now.toDateString() + " " + now.toLocaleTimeString(),
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col5 = $("<td />", {
+                    text: delivery_date.toDateString() + " " + delivery_date.toLocaleTimeString(),
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+                var col6 = $("<td />", {
+                    text: (data.total * 0.95).toFixed(2)
+                });
+
+                var status_img;
+                switch(data.status){
+                    case "RAISED": status_img = "fiber_new"; break;
+                    case "CONFIRMED": status_img = "event_available"; break;
+                    case "PAID": status_img = "check_circle"; break;
+                }
+                var col7 = $("<td />", {
+                    html: "<i class='material-icons status_row'>"+status_img+"</i><span>"+data.status+"</span>",
+                    class: "mdl-data-table__cell--non-numeric"
+                });
+            
+                global_inv_id++;
+                row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6).append(col7)
+                $("#invlist").find('tbody').append(row);
+            }
+            
+            var orderData;
+            function getSOList() {
+                $.get("http://139.99.106.240:2002/orders/list")
+                .done((data) => {
+                    var orders = data.data;
+
+                    global_so_id = 1;
+                    $("#orderlist").find('tbody').empty();
+                    $("#create-PO-btn").attr("disabled", true);
+
+                    filteredOrders = orders.filter(orders => orders.status == 'CONFIRMED');
+                    var ordersToShow = filteredOrders.map(
+                        order => {
+                            var new_order = order;
+                            var itemList = order.arrayitem.filter(o => o.vendor == userinfo._id && !o.processed);
+                            new_order.arrayitem = itemList;
+                            return new_order;
+                        }
+                    ).filter(o => o.arrayitem.length > 0);
+                    ordersToShow.sort((a,b) => (a.delivery > b.delivery) ? 1 : ((b.delivery > a.delivery) ? -1 : 0)).map(ord => ord.arrayitem.map((x, i) => add_to_table(ord, i)));
+                    orderData = ordersToShow;
+
+                    refreshMDL();
+                });
+            }
+
+            var poData;
+            function getPOList() {
+                $.get("http://139.99.106.240:2002/orders/po/list?vendor=" + userinfo._id)
+                .done(
+                    (data) => {
+                        var rawPurchaseOrders = data.data;
+
+                        global_po_id = 1;
+                        $("#polist").find('tbody').empty();
+                        $("#create-INV-btn").attr("disabled", true);
+                        
+                        var showData = rawPurchaseOrders.filter(po => po.vendor == userinfo._id)
+                        showData.map(add_to_table_delivery);
+                        poData = showData; 
+
+                        refreshMDL();
+                    }
+                );
+            }
+
+            var invData;
+            function getInvList(){
+                $.get('http://139.99.106.240:2002/invoices/list?vendor=' + userinfo._id)
+                .done(
+                    data => {
+                        global_inv_id = 1;
+                        $("#invlist").find('tbody').empty();
+                        $("#confirm-INV-btn").attr("disabled", true);
+
+                        if(data && data !== undefined){
+                            var invoices = data.data;
+                            invoices.map(add_to_table_inv);
+                            invData = invoices;
+                        }
+
+                        refreshMDL();
+                    }
+                ).fail(
+                    data => {
+                        openModal("Error", true, data.data, "OK", closeModal, false);
+                    }
+                );
+            }
+       
+            $("#hello").html("สวัสดี คุณ "+userinfo.name);
+            updateDrawerUser()
+            function updateDrawerUser() {
+                $("#user-name").text(userinfo.name ? userinfo.name : "" + " " + userinfo.surname ? userinfo.surname : "")
+                $("#user-email").text(userinfo.email ? userinfo.email : "")
+            }
+
+            updateTable();
+            function updateTable() {
+                getSOList();
+                getPOList();
+                getInvList();
+                closeModal();
+            }
+
+            function generate_purchase_order(){
+                $("#create-PO-btn").attr("disabled", true);
+                data = buildSOData(orderData);
+                if(!data) {
+                    openModal("Error", true, "Please, select some items before create PO.", "OK", closeModal, false);
+                    return;
+                }
+
+                $.ajax({
+                    url: "http://139.99.106.240:2002/orders/po/create/" + userinfo._id,
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data)
+                }).done(
+                    resdata => {
+                        openModal("Success", true, resdata.data, "OK", updateTable, false);
+                    }
+                ).fail(
+                    resdata => {
+                        openModal("Error", true, "These orders were processed.", "OK", closeModal, false);
+                    }
+                )
+            }
+
+            function generate_invoice(){
+                $("#create-INV-btn").attr("disabled", true);
+                var selectedData = findSelectedData("polist", poData);
+
+                if(!selectedData){
+                    openModal("Error", true, "Please, select some PO before create invoice.", "OK", closeModal, false);
+                    return;
+                }
+                
+                $.ajax('http://139.99.106.240:2002/invoices/create', {
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(selectedData)
+                }).done(
+                    data => {
+                        openModal("Success", true, data.data, "OK", updateTable, false);
+                    }
+                ).fail(
+                    data => {
+                        openModal("Error", true, data.responseJSON.data, "OK", closeModal, false);
+                    }
+                )
+            }
+
+            function confirm_invoice() {
+                $("#confirm-INV-btn").attr("disabled", true);
+                var selectedData = findSelectedData("invlist", invData);
+
+                if(!selectedData){
+                    openModal("Error", true, "Please, select some invoices before confirm invoices.", "OK", closeModal, false);
+                    return;
+                }
+
+                selectedData.map(x => {
+                    x.status = "CONFIRMED";
+                    x.processed = true;
+                }
+                );
+
+                $.ajax('http://139.99.106.240:2002/invoices/edit', {
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(selectedData)
+                }).done(
+                    data => {
+                        openModal("Success", true, data.data, "OK", updateTable, false);
+                    }
+                ).fail(
+                    data => {
+                        openModal("Error", true, data.responseJSON.data, "OK", closeModal, false);
+                    }
+                )
+            }
+
+            function onSeleted(id) {
+                var table_num = id.split("-")[0]
+                var main_id = "checkbox-all-"+table_num
+                var main_checkbox = $("#"+main_id);
+
+                var checkboxs = $("#orderlist").find(".mdl-checkbox__input");
+                if($("#checkbox-"+id).prop('checked')) {
+                    toggleMainBtn(table_num, false);
+
+                    var all = true;
+                    for(var i = 0; i < checkboxs.length; i++) {
+                        if(checkboxs[i].id != main_id && !checkboxs[i].checked) {
+                            all = false;
+                            break;
+                        }
+                    }
+
+                    if(all) {
+                        main_checkbox.parent().addClass("is-checked");
+                        main_checkbox.prop('checked', true);
+                    }
+                }
+                else {
+                    main_checkbox.parent().removeClass("is-checked");
+                    main_checkbox.prop('checked', false);
+
+                    var none = true;
+                    for(var i = 0; i < checkboxs.length; i++) {
+                        if(checkboxs[i].id != main_id && checkboxs[i].checked) {
+                            none = false;
+                            break;
+                        }
+                    }
+
+                    if(none) {
+                        toggleMainBtn(table_num, true)
+                    }
+                }
+            }
+
+            function toggleMainBtn(table_num, flag) {
+                switch(table_num) {
+                    case "1":
+                        $("#create-PO-btn").attr("disabled", flag);
+                        break;
+                    case "2":
+                        $("#create-INV-btn").attr("disabled", flag);
+                        break;
+                    case "3":
+                        $("#confirm-INV-btn").attr("disabled", flag);
+                        break;
+                }
+            }
+
+            function checkedAll(table_id, check_all_id) {
+                var table_num = check_all_id.split("-").splice(-1)[0]
+                var $table_obj = $("#"+table_id)
+                if ($("#"+check_all_id).prop('checked')) {
+                    $table_obj.find(".mdl-checkbox__input:not([disabled])").prop("checked", true).parent().addClass("is-checked");
+
+                    var blank_count = 0;
+                    var checkboxs = $table_obj.find("tbody").find(".mdl-checkbox__input")
+                    for(var i = 0; i < checkboxs.length; i++) {
+                        if (!checkboxs[i].checked) {
+                            blank_count++;
+                        }
+                    }
+                    if(blank_count != checkboxs.length) {
+                        toggleMainBtn(table_num, false);
+                    }
+                }
+                else {
+                    $table_obj.find(".mdl-checkbox__input").prop("checked", false).parent().removeClass("is-checked");
+                    toggleMainBtn(table_num, true);
+                }
+            }
+
+            function buildSOData(data) {
+                var checkboxs = $("#orderlist").find("tbody").find(".mdl-checkbox__input");
+                var blank_count = 0;
+                var flat_items = [];
+                var remove_target = [];
+                
+                for(var j = 0; j < data.length; j++){
+                    for(var k = 0; k < data[j].arrayitem.length; k++) {
+                        flat_items.push(data[j].arrayitem[k]);
+                    }
+                }
+                
+                for(var i = 0; i < checkboxs.length; i++) {
+                    if (checkboxs[i].checked) {
+                        remove_target.push(flat_items[i]);
+                    }
+                    else {
+                        blank_count++;
+                    }
+                }
+                
+                if(blank_count == checkboxs.length) {
+                    return null;
+                }
+                else {
+                    new_data = data.map(ord => { 
+                        temp = ord;
+                        temp.arrayitem = ord.arrayitem.filter(x => remove_target.indexOf(x) != -1);
+                        return temp;
+                    });
+                    return new_data.filter(x => x.arrayitem.length > 0);
+                }
+            }
+
+            function findSelectedData(table_id, data) {
+                var checkboxs = $("#"+table_id).find("tbody").find(".mdl-checkbox__input");
+                var blank_count = 0;
+                var target = [];
+
+                for(var i = 0; i < checkboxs.length; i++) {
+                    if (checkboxs[i].checked) {
+                        target.push(data[i]);
+                    }
+                    else {
+                        blank_count++;
+                    }
+                }
+
+                if(blank_count == checkboxs.length) {
+                    return null;
+                }
+                else {
+                    return target;
+                }
+            }
+        </script>
+    </body>
+</html>

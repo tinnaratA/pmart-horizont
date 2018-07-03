@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/getmdl-select.min.css">
+        <script defer src="js/getmdl-select.min.js"></script>
+        <style>
+            .fullbody {
+                width: 100%;
+                height: 100%;
+            }
+            .register-card {
+                width: 80%;
+                height: 80%;
+                position: absolute;
+                top: 10%;
+                left: 10%;
+            }
+            .register-title {
+                background-color: #3f51b5;
+            }
+            .register-title-text {
+                color: white;
+                text-align: center;
+                width: 100%;
+                display: inline-block;
+            }
+            .register-content {
+                width: calc(100% - 32px);
+                height: 100%;
+                overflow: auto;
+            }
+            .full-width {
+                width: 100%;
+            }
+            h5 {
+                margin: 8px 0 8px;
+            }
+            .right {
+                text-align: right;
+                margin-top: 16px;
+                margin-bottom: 24px;
+            }
+            .divider {
+                height: 1px;
+                width: 100%;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                background-color: #E0E0E0;
+            }
+            .modal {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-flex-wrap: nowrap;
+                -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
+                left: 20%;
+                width: 60%;
+                height: 60%;
+                position: absolute;
+                box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+                box-sizing: border-box;
+                border-right: 1px solid #e0e0e0;
+                background: #fafafa;
+                -webkit-transform: translateY(-102%);
+                -ms-transform: translateY(-102%);
+                transform: translateY(-102%);
+                -webkit-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+                will-change: transform;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                -webkit-transition-property: -webkit-transform;
+                transition-property: transform;
+                color: #424242;
+                overflow: visible;
+                overflow-y: auto;
+                z-index: 5;
+            }
+            .modal-obfuscator {
+                background-color: transparent;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 4;
+                visibility: hidden;
+                -webkit-transition-property: background-color;
+                transition-property: background-color;
+                -webkit-transition-duration: .2s;
+                transition-duration: .2s;
+                -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+            }
+            .ob-active {
+                background-color: rgba(0,0,0,.5);
+                visibility: visible;
+            }
+            .modal-active {
+                -webkit-transform: translateY(30%);
+                -ms-transform: translateY(30%);
+                transform: translateY(30%);  
+            }
+            .modal-container {
+                width: calc(100% - 32px);
+                height: 100%;
+                padding: 16px;
+            }
+            .modal-title {
+                margin: 16px 0 16px;
+                font-size: 1.5em;
+            }
+            .modal-content {
+                margin-top: 16px;
+            }
+            .modal-action {
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+            }
+            .modal-btn-hide {
+                display: none;
+            }
+            .mdl-grid {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        </style>
+    </header>
+    <body class="fullbody">
+        <div class="modal">
+            <div class="modal-container">
+                <div class="modal-title" id="modal-title"></div>
+                <div class="divider"></div>
+                <div class="modal-content" id="modal-content"></div>
+                <div class="modal-action">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="modal-action">
+                        ตกลง
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect" style="margin-left: 8px;" onclick="closeModal()" id="modal-close">
+                        ปิด
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-obfuscator"></div>
+        <div class="mdl-card mdl-shadow--4dp register-card">
+            <div class="mdl-card__title register-title">
+                <h2 class="mdl-card__title-text register-title-text">ลงทะเบียน</h2>
+            </div>
+            <div class="mdl-card__supporting-text register-content">
+                <form onsubmit="return false;">
+                    <h5>ข้อมูลผู้ใช้</h5>
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="user">
+                                <label class="mdl-textfield__label" for="user">ชื่อผู้ใช้</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="password" id="pass" onkeyup="onKeyUpPassword()" onchange="checkPassword()">
+                                <label class="mdl-textfield__label" for="pass">รหัสผ่าน</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="password" id="confirm-pass" onkeyup="onKeyUpConfirmPassword()" onchange="checkPassword()">
+                                <label class="mdl-textfield__label" for="confirm-pass">ยืนยันรหัสผ่าน</label>
+                                <span class="mdl-textfield__error" id="pass-err"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h5>ข้อมูลส่วนบุคคล</h5>
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="name">
+                                <label class="mdl-textfield__label" for="name">ชื่อ</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="surname">
+                                <label class="mdl-textfield__label" for="surname">นามสกุล</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="shopname">
+                                <label class="mdl-textfield__label" for="shopname">ชื่อร้านค้า</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height full-width">
+                                <input type="text" value="" class="mdl-textfield__input" id="shoptype" readonly>
+                                <input type="hidden" value="" name="shoptype">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <label for="shoptype" class="mdl-textfield__label">ประเภทร้านค้า</label>
+                                <ul for="shoptype" class="mdl-menu mdl-menu--bottom-left mdl-js-menu"></ul>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height full-width" id="subtypeOption">
+                                <input type="text" value="" class="mdl-textfield__input" id="shopsubtype" readonly>
+                                <input type="hidden" value="" name="shopsubtype">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <label for="shopsubtype" class="mdl-textfield__label">ประเภทร้านค้าย่อย</label>
+                                <ul for="shopsubtype" class="mdl-menu mdl-menu--bottom-left mdl-js-menu"></ul>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height full-width">
+                                <input type="text" value="" class="mdl-textfield__input" id="bank" readonly>
+                                <input type="hidden" value="" name="bank">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <label for="bank" class="mdl-textfield__label">ธนาคาร</label>
+                                <ul for="bank" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                                    <li class="mdl-menu__item" data-val="kbank">กสิกรไทย</li>
+                                    <li class="mdl-menu__item" data-val="scb">ไทยพาณิชย์</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="bank-number" pattern="-?(\d+-?)+\d+?">
+                                <label class="mdl-textfield__label" for="bank-number">เลขที่สมุดบัญชี</label>
+                                <span class="mdl-textfield__error">Wrong format!</span>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="line">
+                                <label class="mdl-textfield__label" for="line">ที่อยู่</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="subdistrict">
+                                <label class="mdl-textfield__label" for="subdistrict">แขวง/ตำบล</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="district">
+                                <label class="mdl-textfield__label" for="district">เขต/อำเภอ</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="province">
+                                <label class="mdl-textfield__label" for="province">จังหวัด</label>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="postcode" pattern="-?[0-9]*(\.[0-9]+)?">
+                                <label class="mdl-textfield__label" for="postcode">รหัสไปรษณีย์</label>
+                                <span class="mdl-textfield__error">Input is not a number!</span>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="text" id="phone" pattern="-?(\d+-?)+\d+?">
+                                <label class="mdl-textfield__label" for="phone">โทร.</label>
+                                <span class="mdl-textfield__error">Wrong format!</span>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-width">
+                                <input class="mdl-textfield__input" type="email" id="email">
+                                <label class="mdl-textfield__label" for="email">อีเมลล์</label>
+                                <span class="mdl-textfield__error">Wrong email format!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="full-width right">
+                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" style="margin-right: 16px" onclick="location.href='index.html'">
+                            กลับ
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" style="margin-right: 16px" onclick="register()">
+                            ลงทะเบียน
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            function refreshMDL() {
+                componentHandler.upgradeDom();
+            }
+
+            $(".modal-obfuscator").click(function() {
+                closeModal();
+            });
+
+            function closeModal() {
+                $(".modal").removeClass("modal-active");
+                $(".modal-obfuscator").removeClass("ob-active");
+            }
+
+            function openModal(title, isText, content, action, action_func, isClosable) {
+                var modal_title = $("#modal-title");
+                var modal_content = $("#modal-content");
+                var modal_action = $("#modal-action");
+                var modal_close = $("#modal-close");
+
+                modal_title.empty();
+                modal_content.empty();
+                modal_action.empty();
+                modal_action.off("click");
+
+                modal_title.text(title);
+                if (isText) {
+                    modal_content.html(content);
+                } else {
+                    modal_content.append(content);
+                }
+                
+                modal_action.text(action);
+                modal_action.click(action_func);
+
+                if (isClosable) {
+                    modal_close.removeClass("modal-btn-hide");
+                } else {
+                    modal_close.addClass("modal-btn-hide");
+                }
+
+                $(".modal").addClass("modal-active");
+                $(".modal-obfuscator").addClass("ob-active");
+
+                refreshMDL();
+            }
+
+            function register() {
+                data = {
+                    username: $("#user").val(),
+                    password: $("#pass").val(),
+                    name: $("#name").val(),
+                    surname: $("#surname").val(),
+                    shopname: $("#shopname").val(),
+                    shoptype: $("#shoptype").val(),
+                    shopsubtype: $("#shopsubtype").val(),
+                    bank: $("#bank").val(),
+                    bank_number: $("#bank-number").val(),
+                    line: $("#line").val(),
+                    subdistrict: $("#subdistrict").val(),
+                    district: $("#district").val(),
+                    province: $("#province").val(),
+                    post_code: $("#postcode").val(),
+                    phone: $("#phone").val(),
+                    email: $("#email").val(),
+                    type:"CUSTOMER"
+                };
+
+                if(!data.name){
+                    openModal("Plese Insert Your name", true, "Please Provide your name data!", "OK", closeModal, false);
+                    return;
+                }
+
+                if(!data.bank && !data.bank_number){
+                    openModal("Your bankaccount is not provided", true, "Please Provide your bank account data!", "OK", closeModal, false);
+                    return;
+                }
+
+                if($("#pass").val() != $("#confirm-pass").val() ){
+                    openModal("Your password confirmation is incorrect", true, "Plese recheck your password confirmation", "OK", closeModal, false);
+                    return;
+                }
+
+                $.post("http://139.99.106.240:2002/users/register", data).then(
+                    _ => {
+                        openModal("Success", true, "You have successfully registered", "OK", () => window.location = "/", false);
+                    }
+                )
+            }
+
+            function onKeyUpPassword() {
+                confirm = $("#confirm-pass").val();
+                if (confirm) {
+                    onKeyUpConfirmPassword();
+                }
+            }
+
+            function onKeyUpConfirmPassword() {
+                pass = $("#pass").val();
+                confirm = $("#confirm-pass").val();
+                
+                if (pass) {
+                    $("#confirm-pass").parent().removeClass("is-invalid");
+                }
+                else {
+                    $("#confirm-pass").parent().addClass("is-invalid");
+                    $("#pass-err").text("Password is empty!");
+                }
+            }
+
+            function checkPassword() {
+                pass = $("#pass").val();
+                confirm = $("#confirm-pass").val();
+
+                if (pass && confirm) {
+                    if (pass == confirm) {
+                        $("#confirm-pass").parent().removeClass("is-invalid");
+                    }
+                    else {
+                        $("#confirm-pass").parent().addClass("is-invalid");
+                        $("#pass-err").text("Password is not the same!");
+                    }
+                }
+            }
+
+            var typeList = {
+                "Horece": {
+                    "11": "ร้านหมูกระทะ/สุกี้/ชาบู/แจ่วฮ้อน",
+                    "12": "ร้านอาหารตามสั่ง",
+                    "13": "ร้านข้าวราดแกง/ร้านอาหารจานเดียว",
+                    "14": "ร้านอาหารไทย",
+                    "15": "ร้านอาหารอีสาน",
+                    "16": "ร้านสเต็ก",
+                    "17": "ร้านก๋วยเตี๋ยว",
+                    "18": "ร้านเบเกอรี่",
+                    "19": "โรงแรม/รีสอร์ท",
+                    "20": "สถานบันเทิง/ผับ/บาร์",
+                    "21": "ร้านชา-กาแฟ/ไอศกรีม",
+                    "22": "ร้านอาหารรถเข็น",
+                    "23": "ธุรกิจจัดเลี้ยง",
+                    "24": "ร้านขายอาหารประเภทอื่นๆ",
+                    "25": "ร้านปลาเผา/ทะเลเผา",
+                    "26": "ร้านอาหารเหนือ",
+                    "27": "ร้านอาหารใต้",
+                    "28": "ร้านอาหารญี่ปุ่น",
+                    "29": "ร้านอาหารจีน",
+                    "30": "ร้านอาหารเกาหลี",
+                    "31": "ร้านอาหารตะวันตก"
+                },
+                "Dealer": {
+                    "70": "ยี่ปั๊ว",
+                    "71": "โรงงาน",
+                    "72": "ธุรกิจส่งออก",
+                    "73": "ขายส่งกลุ่มDry Food"
+                },
+                "Service": {
+                    "80": "ธุรกิจจัดการท่องเที่ยว/ทัวร์/สายการบิน",
+                    "81": "สถานพยาบาล",
+                    "82": "สานักงานหน่วยราชการ/รัฐวิสาหกิจ",
+                    "83": "มูลนิธิ/สมาคม/โรตารี่",
+                    "84": "สานักงานเอกชน",
+                    "85": "สถาบันอื่นๆ อาทิ สถานฑูต/ศูนย์ศิลปาชีพ",
+                    "86": "โรงเรียน/วิทยาลัย/มหาวิทยาลัย",
+                    "87": "สถานบันการศึกษาในรูปแบบอื่นๆ อาทิ สถาบันกวดวิชา/สอนภาษา/วิชาชีพ",
+                    "99": "Other"
+                },
+                "Market": {
+                    "60": "ร้านค้าปลีก/แผงลอย อาหารสดประเภทหมู",
+                    "61": "ร้านค้าปลีก/แผงลอย อาหารประเภทเนื้อวัว",
+                    "62": "ร้านค้าปลีก/แผงลอย อาหารสดประเภทเนื้อปลา",
+                    "63": "ร้านค้าปลีก/แผงลอย อาหารสดประเภทอาหารทะเล",
+                    "64": "ร้านค้าปลีก/แผงลอย อาหารสดประเภทไก่/เป็ด/ไข่",
+                    "65": "ร้านค้าปลีก/แผงลอย อาหารสดประเภทแช่แข็ง/แช่เย็น",
+                    "66": "ร้านค้าปลีก/แผงลอย อาหารสดประเภทผัก/ผลไม้",
+                    "67": "ร้านค้าปลีก/แผงลอย สินค้าบริโภค กลุ่มเครื่องปรุงของแห้ง",
+                    "68": "ร้านค้าปลีก/แผงลอย สินค้าบริโภค กลุ่มสินค้าเกษตร",
+                    "69": "ร้านค้าปลีก/แผงลอย สินค้าอุปโภคหรือของใช้อื่นๆ"
+                }
+            };
+
+            $("#shoptype").change(function () {
+                target = $("#shopsubtype").parent().find("ul");
+                target.empty();
+                var types = typeList[$(this).val()];
+                for (var k in types) {
+                    target.append($("<li />", {class: "mdl-menu__item", text: types[k]}).attr("data-val", k));
+                }
+
+                getmdlSelect.init("#subtypeOption");
+            });
+
+            function initShopType() {
+                target = $("#shoptype").parent().find("ul");
+                for(var k in typeList) {
+                    target.append($("<li />", {class: "mdl-menu__item", text: k}).attr("data-val", k));
+                }
+            }
+            initShopType();
+        </script>
+    </body>
+</html>
